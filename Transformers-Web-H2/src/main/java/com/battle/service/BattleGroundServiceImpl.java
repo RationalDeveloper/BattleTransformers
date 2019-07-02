@@ -33,7 +33,7 @@ public class BattleGroundServiceImpl implements BattleGroundService {
 	
 	@Override
 	public String saveTransformer(Transformer t) {
-		System.out.println("saveTransformer service");
+		//System.out.println("saveTransformer service");
 		tRepo.save(t);
 		return "Saved";
 	}
@@ -42,7 +42,7 @@ public class BattleGroundServiceImpl implements BattleGroundService {
 	public String updateTransformer(Transformer t) throws Exception{
 		
 		try {
-			System.out.println("updateTransformer service");
+			//System.out.println("updateTransformer service");
 			Optional<Transformer> oTransformer = tRepo.findById(t.getId());
 			Transformer tEntity = oTransformer.get();
 			
@@ -148,11 +148,11 @@ public class BattleGroundServiceImpl implements BattleGroundService {
 			ro.setLosingTeamMembers(losingTeam.equals(TransformerType.AUTOBOT)? survivingMembersAutobots.toString(): survivingMembersDecepticons.toString());
 			String jsonStringReturn = Obj.writeValueAsString(ro);
 			
-			System.out.println("Number of Battles: " + numberOfBattles + " battle");
-			System.out.println("Winning Team(" + winningTeam + "): " + (autobotWin > decepticonWin?winningMembersAutobots.toString() : winningMembersDecepticons.toString()));
-			System.out.println("Tie: " + tie);
-			System.out.println("Survivors from the losing team (" + losingTeam + "): " + (autobotWin > decepticonWin ? survivingMembersDecepticons.toString(): survivingMembersAutobots.toString()));
-			System.out.println("JsonString" + jsonStringReturn);
+//			System.out.println("Number of Battles: " + numberOfBattles + " battle");
+//			System.out.println("Winning Team(" + winningTeam + "): " + (autobotWin > decepticonWin?winningMembersAutobots.toString() : winningMembersDecepticons.toString()));
+//			System.out.println("Tie: " + tie);
+//			System.out.println("Survivors from the losing team (" + losingTeam + "): " + (autobotWin > decepticonWin ? survivingMembersDecepticons.toString(): survivingMembersAutobots.toString()));
+//			System.out.println("JsonString" + jsonStringReturn);
 			return jsonStringReturn;
 		} 
 		catch(JsonProcessingException jpe) {
@@ -165,7 +165,7 @@ public class BattleGroundServiceImpl implements BattleGroundService {
 		}
 	}
 	
-	//Apply all the rules to determine the winner after the battle starts
+	//Check for the duplicate leaders fighting
 	private boolean areTransformersLeaders(Transformer autoBot, Transformer decepticon) {
 		if(autoBot.getName().equals(decepticon.getName())) {
 			if (autoBot.getName().equals(BattleContants.OPTIMUS_PRIME) || autoBot.getName().equals(BattleContants.PREDAKING)) {
