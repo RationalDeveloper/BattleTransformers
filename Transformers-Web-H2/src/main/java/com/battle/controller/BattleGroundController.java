@@ -43,14 +43,12 @@ public class BattleGroundController {
 	
 	@PostMapping(path = "/transformers", produces="application/json")
 	public ResponseEntity<String> saveTransformer(@RequestBody Transformer t) {
-		System.out.println("saveTransformer");
 		battleGroundSservice.saveTransformer(t);
 		return new ResponseEntity<>("{\"success\":true}", HttpStatus.OK);
 	}
 	
 	@RequestMapping(path = "/transformers/{id}", produces="application/json", method = RequestMethod.PATCH)
 	public ResponseEntity<String> updateTransformer(@RequestBody Transformer t) {
-		System.out.println("updateTransformer");
 		try {
 			battleGroundSservice.updateTransformer(t);
 		} catch (Exception e) {
@@ -62,18 +60,14 @@ public class BattleGroundController {
 	}
 	
 	@DeleteMapping("/transformers/{id}")
-	public String deleteTransformer(@PathVariable int id) {
-		System.out.println("deleteTransformer");
+	public ResponseEntity<String> deleteTransformer(@PathVariable int id) {
 		tRepo.deleteById(id);
-		return "deleted";
+		return new ResponseEntity<>("{\"success\":true}", HttpStatus.OK);
 	}
 	
 	@GetMapping(path = "/transformers", produces="application/json")
 	@ResponseBody
 	public List<Transformer> listTransformers() {
-		System.out.println("listTransformers:" + tRepo.findAll());
-		//ModelAndView mv = new ModelAndView("displaytransformers");
-		//mv.addObject("transformersList", tRepo.findAll());
 		return (List<Transformer>) tRepo.findAll();
 	}
 	
@@ -93,6 +87,6 @@ public class BattleGroundController {
 	@GetMapping(path = "*")
 	@ResponseBody
 	public String getFallback() {
-	    return "Fallback for GET Requests";
+	    return "Invalid Request - Please check the endpoint";
 	}
 }
