@@ -74,13 +74,13 @@ Ext.require([
 		        iconCls: 'icon-user',
 		        columns: [{
 		            text: 'No.',
-		            width: 40,
+		            width: 60,
 		            sortable: true,
 		            dataIndex: 'id',
 		            field: {
 		                xtype: 'numberfield',
 		                value:4,
-		                minValue: 3
+		                minValue: 1
 		            }
 		        }, {
 		            text: 'Name',
@@ -92,7 +92,7 @@ Ext.require([
 		            }
 		        }, {
 		            text: 'Type',
-		            width: 100,
+		            width: 120,
 		            sortable: true,
 		            dataIndex: 'type',
 		            field: {
@@ -112,7 +112,7 @@ Ext.require([
 		            }
 		        }, {
 		            text: 'Intelligence',
-		            width: 80,
+		            width: 100,
 		            sortable: true,
 		            dataIndex: 'intelligence',
 		            field: {
@@ -132,7 +132,7 @@ Ext.require([
 		            }
 		        }, {
 		            text: 'Endurance',
-		            width: 80,
+		            width: 90,
 		            sortable: true,
 		            dataIndex: 'endurance',
 		            field: {
@@ -162,7 +162,7 @@ Ext.require([
 		            }
 		        }, {
 		            text: 'Firepower',
-		            width: 80,
+		            width: 100,
 		            sortable: true,
 		            dataIndex: 'firepower',
 		            field: {
@@ -182,7 +182,7 @@ Ext.require([
 		            }
 		        }, {
 		            text: 'Overall Rating',
-		            width: 80,
+		            width: 120,
 		            sortable: true,
 		            dataIndex: 'overallRating'
 		        }],
@@ -190,7 +190,6 @@ Ext.require([
 		            xtype: 'toolbar',
 		            items: [{
 		                text: 'Add',
-		                //iconCls: 'icon-add',
 		                handler: function(){
 		                    // empty record
 		                    store.insert(0, new Transformer());
@@ -199,7 +198,6 @@ Ext.require([
 		            }, '-', {
 		                itemId: 'delete',
 		                text: 'Delete',
-		                //iconCls: 'icon-delete',
 		                disabled: true,
 		                handler: function(){
 		                    var selection = grid.getView().getSelectionModel().getSelection()[0];
@@ -210,38 +208,39 @@ Ext.require([
 		            }, '-', {
 		                itemId: 'battle',
 		                text: 'Battle',
-		                //iconCls: 'icon-delete',
-		                //disabled: true,
 		                handler: function(){
 		                    var selection = grid.getView().getSelectionModel().getSelection();
-		                    var values = new Array();
-		                    for (var i = 0; i<selection.length;i++){
-		                    	values[i] = {id:selection[i].id};
+		                    if(selection.length < 2){
+		                    	Ext.Msg.alert('Alert', 'Please select at least 2 Transformers to Battle');
 		                    }
-		                    Ext.Ajax.request({
-		                        url: '/battleground/goBattle',
-		                        method:'POST',
-		                        jsonData: values,
-				                headers:
-				                {
-				                    'Content-Type': 'application/json'
-				                },
-		                        success: function(response, opts) {
-		                            var obj = Ext.decode(response.responseText);
-		                            Ext.Msg.alert('Success', 'Number Of Battles' + obj.numberOfBattles 
-		                            					+ '<br> Winning Team:' + obj.winningTeam
-		                            					+ '<br> Members from Winning Team:' + obj.winningTeamMembers
-		                            					+ '<br> Losing Team:' + obj.losingTeam
-		                            					+ '<br> Members from Losing Team:' + obj.losingTeamMembers
-		                            					+ '<br> Tie:' + obj.tie);
-		                            //console.dir(obj);
-		                        },
+		                    else{
+		                    	var values = new Array();
+			                    for (var i = 0; i<selection.length; i++){
+			                    	values[i] = {id:selection[i].id};
+			                    }
+			                    Ext.Ajax.request({
+			                        url: '/battleground/goBattle',
+			                        method:'POST',
+			                        jsonData: values,
+					                headers:
+					                {
+					                    'Content-Type': 'application/json'
+					                },
+			                        success: function(response, opts) {
+			                            var obj = Ext.decode(response.responseText);
+			                            Ext.Msg.alert('Success', 'Number Of Battles' + obj.numberOfBattles 
+			                            					+ '<br> Winning Team:' + obj.winningTeam
+			                            					+ '<br> Members from Winning Team:' + obj.winningTeamMembers
+			                            					+ '<br> Losing Team:' + obj.losingTeam
+			                            					+ '<br> Members from Losing Team:' + obj.losingTeamMembers
+			                            					+ '<br> Tie:' + obj.tie);
+			                        },
 
-		                        failure: function(response, opts) {
-		                        	Ext.Msg.alert('Alert', 'Failure');
-		                            //console.log('server-side failure with status code ' + response.status);
-		                        }
-		                    });
+			                        failure: function(response, opts) {
+			                        	Ext.Msg.alert('Alert', 'Failure');
+			                        }
+			                    });
+		                    }
 		                }
 		            }]
 		        }]
